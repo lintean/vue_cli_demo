@@ -6,11 +6,13 @@ import router from './router'
 import ElementUI from 'element-ui'
 import 'element-ui/lib/theme-chalk/index.css'
 import Axios from 'axios'
+import echarts from 'echarts'
 
 // 使用插件
 Vue.use(ElementUI)
 Vue.prototype.$http = Axios
 Axios.defaults.baseURL = '/api'
+Vue.prototype.$echarts = echarts
 
 Vue.config.productionTip = false
 

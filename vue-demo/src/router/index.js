@@ -1,21 +1,21 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import HelloWorld from '@/components/HelloWorld'
-import EntitySearch from '@/components/EntitySearch'
+import EntityDetail from '@/components/EntityDetail'
+import EntityNetwork from '@/components/EntityNetwork'
 
 Vue.use(Router)
 
 export default new Router({
   routes: [
     {
-      path: '/EntitySearch',
-      name: 'EntitySearch',
-      component: EntitySearch
+      path: '/EntityDetail',
+      name: 'EntityDetail',
+      component: EntityDetail
     },
-    {
-      path: '/HelloWorld',
-      name: 'HelloWorld',
-      component: HelloWorld
-    }
+		{
+		  path: '/EntityNetwork',
+		  name: 'EntityNetwork',
+		  component: EntityNetwork
+		}
   ]
 })
