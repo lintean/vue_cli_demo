@@ -14,41 +14,49 @@
             </div>
           </el-col>
         </el-row>
+				
         <el-row :gutter="0" style="margin-top: 10px">
             <el-col :span="6" :offset="5">
               <el-autocomplete
                 v-model="currKeyword"
                 :fetch-suggestions="searchEntityAsync"
+								:trigger-on-focus="false"
                 placeholder="请输入搜索关键字"
                 @select="handleSelectEntity"
                 style="width:400px"
                 clearable
               ></el-autocomplete>
             </el-col>
+						
           <el-col :span="1" style="margin-left: 80px;margin-right: 5px">
             <el-button type="primary" @click="getEntityInfo" icon="el-icon-info"></el-button>
               <!--:disabled="infoBtnDisabled"></el-button>-->
           </el-col>
-            <el-col :span="1" style="margin-left: 10px;margin-right: 5px">
-              <el-button type="primary" @click="showSearchResults" icon="el-icon-search"
-                         :disabled="searchBtnDisabled"></el-button>
-            </el-col>
-            <el-col :span="2" style="margin-left: 10px;margin-right: 5px">
-              <el-select v-model="selectedSearchMode" placeholder="搜索模式"
-                         @change="changeSearchMode">
-                <el-option v-for="item in searchModes"
-                    :key="item.value"
-                    :label="item.label"
-                    :value="item.value">
-                </el-option>
-              </el-select>
-            </el-col>
+					
+          <el-col :span="1" style="margin-left: 10px;margin-right: 5px">
+            <el-button type="primary" @click="showSearchResults" icon="el-icon-search"
+                       :disabled="searchBtnDisabled"></el-button>
+          </el-col>
+					
+          <el-col :span="2" style="margin-left: 10px;margin-right: 5px">
+            <el-select v-model="selectedSearchMode" placeholder="搜索模式"
+                       @change="changeSearchMode">
+              <el-option v-for="item in searchModes"
+                  :key="item.value"
+                  :label="item.label"
+                  :value="item.value">
+              </el-option>
+            </el-select>
+          </el-col>
+					
           <el-col :span="1" style="margin-left:10px">
             <el-checkbox v-model="cn" border :disabled="cnCheckBoxDisabled">中文分词</el-checkbox>
           </el-col>
+					
         </el-row>
       </el-header>
-      <el-main >
+      
+			<el-main>
         <div align="center">
           <el-card class="result-card" v-for="result in searchResults">
             <div slot="header" class="result-header">
