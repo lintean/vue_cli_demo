@@ -64,24 +64,22 @@
 				// 			console.log(newTime);
 				// 			console.log(this.time);
 				var id = null;
+				var _this = this;
 				if (!this.uuid || this.uuid == "") id = "S000120030806";
 				else id = this.uuid;
 
 				//这里是因跨域而暂时不用的网络通讯
-				// 				RestAPI.EntityDetail(id, this.energy_type, this.time_type, this.time[0], this.time[1]).then(res => {
-				// 					console.log(res);
-				// // 					if (res.data.statusCode === 200) {
-				// // 						_this.suggested_entities = res.data.data;
-				// // 						console.log("suggested_entities");
-				// // 						console.log(_this.suggested_entities);
-				// // 
-				// // 					}
-				// 				}).catch(err => {
-				// 					console.log(err)
-				// 				});
+								RestAPI.EntityDetail(id, this.energy_type, this.time_type, this.time[0], this.time[1]).then(res => {
+									console.log(res);
+									if (res.data.statusCode === 200) {
+										_this.energy_detail = res.data;
+									}
+								}).catch(err => {
+									console.log(err)
+								});
 
 				//getTestData函数是放弃网络通讯之后，得到虚拟数据的函数,若启用网络通讯，请把此处注释掉
-				this.getTestData();
+				// this.getTestData();
 				//绘制图表的函数
 				this.drawLine();
 			},

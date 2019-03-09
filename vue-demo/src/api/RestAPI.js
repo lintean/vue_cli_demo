@@ -27,3 +27,20 @@ export const EntityDetail = (uuid, energy_type, time_type, start_time, end_time)
     }
   })
 };
+
+/**
+ * [实体图结构]
+ * @param  {[string]} uuid       
+ * @param  {[int]} hop_limit  [限制跳数]
+ * @param  {[int]} node_limit [限制节点数量]
+ * @return {[object]}            [description]
+ */
+export const EntityNetwork = (uuid, hop_limit, node_limit) => {
+  return new axios({
+    url: "http://39.108.210.48:18080" + "/entities/" + uuid + "/entity-graph",
+    params: {
+      "hop_limit": hop_limit,
+      "node_limit": node_limit
+    }
+  })
+};

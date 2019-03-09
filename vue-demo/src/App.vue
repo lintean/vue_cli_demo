@@ -91,178 +91,179 @@
 			},
 			searchEntityAsync(keyword, cb) {
 				//网络通讯部分，现在因为跨域问题无法使用
-				// 				RestAPI.searchEntity(keyword, _this.size).then(res => {
-				// 					console.log(res);
-				// 					if (res.data.statusCode === 200) {
-				// 						_this.suggested_entities = res.data.data;
-				// 						console.log("suggested_entities");
-				// 						console.log(_this.suggested_entities);
-				// 
-				// 						var results = [];
-				// 						for (var i = 0; i < _this.suggested_entities.length; i++) {
-				// 							var entity = _this.suggested_entities[i];
-				// 							var FQDN = entity.FQDN;
-				// 							var value = "";
-				// 							switch (_this.selectedSearchMode) {
-				// 								case "filter":
-				// 									value = entity.name;
-				// 									break;
-				// 								case "prefix":
-				// 									value = master_FQDN === "" ? FQDN : FQDN.substring(master_FQDN.length + 1);
-				// 									break;
-				// 								default:
-				// 									value = entity.FQDN;
-				// 									break;
-				// 							}
-				// 							results.push({
-				// 								"value": value,
-				// 								"FQDN": FQDN
-				// 							});
-				// 						}
-				// 						console.log("results:")
-				// 						console.log(results);
-				// 						cb(results);
-				// 					}
-				// 				}).catch(err => {
-				// 					console.log(err)
-				// 				});
-
 				var _this = this;
+				RestAPI.searchEntity(keyword, _this.size).then(res => {
+					console.log(res);
+					if (res.data.statusCode === 200) {
+						_this.suggested_entities = res.data.data;
+						console.log("suggested_entities");
+						console.log(_this.suggested_entities);
 
-				if (keyword == "") {
-					cb(_this.searchHistory);
-				} else {
-					_this.suggested_entities = [{
-						"master_FQDN": "东莞市政府",
-						"score": 22.752232,
-						"FQDN": "东莞市政府 行政中心北楼",
-						"name": "行政中心北楼",
-						"id": 6,
-						"type": "building",
-						"uuid": "S000120010006",
-						"FQDN_alias": "东莞市政府 行政中心北楼",
-						"desc": "",
-						"order": 4
-					}, {
-						"master_FQDN": "东莞市政府 行政中心北楼",
-						"score": 22.093384,
-						"FQDN": "东莞市政府 行政中心北楼 1F",
-						"name": "1F",
-						"id": 37,
-						"type": "floor",
-						"uuid": "S000120020037",
-						"FQDN_alias": "东莞市政府 行政中心北楼 1F",
-						"desc": "",
-						"order": 0
-					}, {
-						"master_FQDN": "东莞市政府 行政中心北楼",
-						"score": 22.093384,
-						"FQDN": "东莞市政府 行政中心北楼 2F",
-						"name": "2F",
-						"id": 38,
-						"type": "floor",
-						"uuid": "S000120020038",
-						"FQDN_alias": "东莞市政府 行政中心北楼 2F",
-						"desc": "",
-						"order": 0
-					}, {
-						"master_FQDN": "东莞市政府 行政中心北楼",
-						"score": 22.093384,
-						"FQDN": "东莞市政府 行政中心北楼 3F",
-						"name": "3F",
-						"id": 39,
-						"type": "floor",
-						"uuid": "S000120020039",
-						"FQDN_alias": "东莞市政府 行政中心北楼 3F",
-						"desc": "",
-						"order": 0
-					}, {
-						"master_FQDN": "东莞市政府 行政中心北楼 1F",
-						"score": 21.756945,
-						"FQDN": "东莞市政府 行政中心北楼 1F 北楼1F-18",
-						"name": "北楼1F-18",
-						"id": 1368,
-						"type": "room",
-						"uuid": "S000120031368",
-						"FQDN_alias": "东莞市政府 行政中心北楼 1F 18",
-						"desc": "",
-						"order": 1368
-					}, {
-						"master_FQDN": "东莞市政府 行政中心北楼 2F",
-						"score": 21.756945,
-						"FQDN": "东莞市政府 行政中心北楼 2F 北楼2F-04",
-						"name": "北楼2F-04",
-						"id": 1369,
-						"type": "room",
-						"uuid": "S000120031369",
-						"FQDN_alias": "东莞市政府 行政中心北楼 2F 04",
-						"desc": "",
-						"order": 1369
-					}, {
-						"master_FQDN": "东莞市政府 行政中心北楼 2F",
-						"score": 21.756945,
-						"FQDN": "东莞市政府 行政中心北楼 2F 北楼2F-05",
-						"name": "北楼2F-05",
-						"id": 1370,
-						"type": "room",
-						"uuid": "S000120031370",
-						"FQDN_alias": "东莞市政府 行政中心北楼 2F 05",
-						"desc": "",
-						"order": 1370
-					}, {
-						"master_FQDN": "东莞市政府 行政中心北楼 2F",
-						"score": 21.756945,
-						"FQDN": "东莞市政府 行政中心北楼 2F 北楼2F-08",
-						"name": "北楼2F-08",
-						"id": 1371,
-						"type": "room",
-						"uuid": "S000120031371",
-						"FQDN_alias": "东莞市政府 行政中心北楼 2F 08",
-						"desc": "",
-						"order": 1371
-					}, {
-						"master_FQDN": "东莞市政府 行政中心北楼 2F",
-						"score": 21.756945,
-						"FQDN": "东莞市政府 行政中心北楼 2F 北楼2F-01",
-						"name": "北楼2F-01",
-						"id": 1372,
-						"type": "room",
-						"uuid": "S000120031372",
-						"FQDN_alias": "东莞市政府 行政中心北楼 2F 01",
-						"desc": "",
-						"order": 1372
-					}, {
-						"master_FQDN": "东莞市政府 行政中心北楼 2F",
-						"score": 21.756945,
-						"FQDN": "东莞市政府 行政中心北楼 2F 北楼2F-02",
-						"name": "北楼2F-02",
-						"id": 1373,
-						"type": "room",
-						"uuid": "S000120031373",
-						"FQDN_alias": "东莞市政府 行政中心北楼 2F 02",
-						"desc": "",
-						"order": 1373
-					}];
-
-					var results = [];
-					for (var i = 0; i < _this.suggested_entities.length; i++) {
-						var entity = _this.suggested_entities[i];
-						var FQDN = entity.FQDN;
-						var value = entity.master_FQDN;
-						var id = entity.uuid;
-						results.push({
-							"value": value,
-							"FQDN": FQDN,
-							"uuid": id
-						});
-					}
-
-					console.log(results);
-					clearTimeout(this.timeout);
-					this.timeout = setTimeout(() => {
+						var results = [];
+						for (var i = 0; i < _this.suggested_entities.length; i++) {
+							var entity = _this.suggested_entities[i];
+							var FQDN = entity.FQDN;
+							var value = "";
+							switch (_this.selectedSearchMode) {
+								case "filter":
+									value = entity.name;
+									break;
+								case "prefix":
+									value = master_FQDN === "" ? FQDN : FQDN.substring(master_FQDN.length + 1);
+									break;
+								default:
+									value = entity.FQDN;
+									break;
+							}
+							results.push({
+								"value": value,
+								"FQDN": FQDN
+							});
+						}
+						console.log("results:")
+						console.log(results);
 						cb(results);
-					}, 3000 * Math.random());
-				}
+					}
+				}).catch(err => {
+					console.log(err)
+				});
+
+				// var _this = this;
+
+				// if (keyword == "") {
+				// 	cb(_this.searchHistory);
+				// } else {
+				// 	_this.suggested_entities = [{
+				// 		"master_FQDN": "东莞市政府",
+				// 		"score": 22.752232,
+				// 		"FQDN": "东莞市政府 行政中心北楼",
+				// 		"name": "行政中心北楼",
+				// 		"id": 6,
+				// 		"type": "building",
+				// 		"uuid": "S000120010006",
+				// 		"FQDN_alias": "东莞市政府 行政中心北楼",
+				// 		"desc": "",
+				// 		"order": 4
+				// 	}, {
+				// 		"master_FQDN": "东莞市政府 行政中心北楼",
+				// 		"score": 22.093384,
+				// 		"FQDN": "东莞市政府 行政中心北楼 1F",
+				// 		"name": "1F",
+				// 		"id": 37,
+				// 		"type": "floor",
+				// 		"uuid": "S000120020037",
+				// 		"FQDN_alias": "东莞市政府 行政中心北楼 1F",
+				// 		"desc": "",
+				// 		"order": 0
+				// 	}, {
+				// 		"master_FQDN": "东莞市政府 行政中心北楼",
+				// 		"score": 22.093384,
+				// 		"FQDN": "东莞市政府 行政中心北楼 2F",
+				// 		"name": "2F",
+				// 		"id": 38,
+				// 		"type": "floor",
+				// 		"uuid": "S000120020038",
+				// 		"FQDN_alias": "东莞市政府 行政中心北楼 2F",
+				// 		"desc": "",
+				// 		"order": 0
+				// 	}, {
+				// 		"master_FQDN": "东莞市政府 行政中心北楼",
+				// 		"score": 22.093384,
+				// 		"FQDN": "东莞市政府 行政中心北楼 3F",
+				// 		"name": "3F",
+				// 		"id": 39,
+				// 		"type": "floor",
+				// 		"uuid": "S000120020039",
+				// 		"FQDN_alias": "东莞市政府 行政中心北楼 3F",
+				// 		"desc": "",
+				// 		"order": 0
+				// 	}, {
+				// 		"master_FQDN": "东莞市政府 行政中心北楼 1F",
+				// 		"score": 21.756945,
+				// 		"FQDN": "东莞市政府 行政中心北楼 1F 北楼1F-18",
+				// 		"name": "北楼1F-18",
+				// 		"id": 1368,
+				// 		"type": "room",
+				// 		"uuid": "S000120031368",
+				// 		"FQDN_alias": "东莞市政府 行政中心北楼 1F 18",
+				// 		"desc": "",
+				// 		"order": 1368
+				// 	}, {
+				// 		"master_FQDN": "东莞市政府 行政中心北楼 2F",
+				// 		"score": 21.756945,
+				// 		"FQDN": "东莞市政府 行政中心北楼 2F 北楼2F-04",
+				// 		"name": "北楼2F-04",
+				// 		"id": 1369,
+				// 		"type": "room",
+				// 		"uuid": "S000120031369",
+				// 		"FQDN_alias": "东莞市政府 行政中心北楼 2F 04",
+				// 		"desc": "",
+				// 		"order": 1369
+				// 	}, {
+				// 		"master_FQDN": "东莞市政府 行政中心北楼 2F",
+				// 		"score": 21.756945,
+				// 		"FQDN": "东莞市政府 行政中心北楼 2F 北楼2F-05",
+				// 		"name": "北楼2F-05",
+				// 		"id": 1370,
+				// 		"type": "room",
+				// 		"uuid": "S000120031370",
+				// 		"FQDN_alias": "东莞市政府 行政中心北楼 2F 05",
+				// 		"desc": "",
+				// 		"order": 1370
+				// 	}, {
+				// 		"master_FQDN": "东莞市政府 行政中心北楼 2F",
+				// 		"score": 21.756945,
+				// 		"FQDN": "东莞市政府 行政中心北楼 2F 北楼2F-08",
+				// 		"name": "北楼2F-08",
+				// 		"id": 1371,
+				// 		"type": "room",
+				// 		"uuid": "S000120031371",
+				// 		"FQDN_alias": "东莞市政府 行政中心北楼 2F 08",
+				// 		"desc": "",
+				// 		"order": 1371
+				// 	}, {
+				// 		"master_FQDN": "东莞市政府 行政中心北楼 2F",
+				// 		"score": 21.756945,
+				// 		"FQDN": "东莞市政府 行政中心北楼 2F 北楼2F-01",
+				// 		"name": "北楼2F-01",
+				// 		"id": 1372,
+				// 		"type": "room",
+				// 		"uuid": "S000120031372",
+				// 		"FQDN_alias": "东莞市政府 行政中心北楼 2F 01",
+				// 		"desc": "",
+				// 		"order": 1372
+				// 	}, {
+				// 		"master_FQDN": "东莞市政府 行政中心北楼 2F",
+				// 		"score": 21.756945,
+				// 		"FQDN": "东莞市政府 行政中心北楼 2F 北楼2F-02",
+				// 		"name": "北楼2F-02",
+				// 		"id": 1373,
+				// 		"type": "room",
+				// 		"uuid": "S000120031373",
+				// 		"FQDN_alias": "东莞市政府 行政中心北楼 2F 02",
+				// 		"desc": "",
+				// 		"order": 1373
+				// 	}];
+
+				// 	var results = [];
+				// 	for (var i = 0; i < _this.suggested_entities.length; i++) {
+				// 		var entity = _this.suggested_entities[i];
+				// 		var FQDN = entity.FQDN;
+				// 		var value = entity.master_FQDN;
+				// 		var id = entity.uuid;
+				// 		results.push({
+				// 			"value": value,
+				// 			"FQDN": FQDN,
+				// 			"uuid": id
+				// 		});
+				// 	}
+
+				// 	console.log(results);
+				// 	clearTimeout(this.timeout);
+				// 	this.timeout = setTimeout(() => {
+				// 		cb(results);
+				// 	}, 3000 * Math.random());
+				// }
 
 			},
 			handleCloseTag(entityTag) {
