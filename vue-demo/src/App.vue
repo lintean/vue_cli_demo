@@ -343,10 +343,14 @@
 			collapseClose() {
 				this.isCollapse = true;
 			},
-			resetIndex(){
+			changeIndex(){
 				//菜单跳转
-				this.activeIndex = "1";
+				var url = this.$route.path;
+				if (url == "/EntityDetail") this.activeIndex = "1";
 			}
+		},
+		watch: {
+			'$route': 'changeIndex'
 		}
 	}
 </script>
