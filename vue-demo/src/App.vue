@@ -1,9 +1,9 @@
 <template>
 	<div id="app">
 		<el-container style="height: 100%; border: 0">
-			<el-aside width="200px" style="background-color: #545c64">
-				<el-menu class="el-menu-vertical-demo" :default-active="activeIndex" :active="activeIndex" background-color="#545c64" text-color="#fff"
-				 active-text-color="#ffd04b" @select="handleSelect" style="border: 0;">
+			<el-aside style="background-color: #545c64;" @mouseenter.native="collapseOpen" @mouseleave.native="collapseClose" width="auto">
+				<el-menu class="el-menu-vertical-demo" :default-active="activeIndex" :active="activeIndex" background-color="#545c64"
+				 text-color="#fff" active-text-color="#ffd04b" @select="handleSelect" style="border: 0;" :collapse="isCollapse">
 					<el-menu-item index="1">
 						<i class="el-icon-menu"></i>
 						<span slot="title">实体详情</span>
@@ -25,7 +25,7 @@
 
 				</el-header>
 
-				<el-main>
+				<el-main style="padding-bottom: 0;">
 					<router-view />
 				</el-main>
 			</el-container>
@@ -56,7 +56,12 @@
 				searchHistory: [],
 				timeout: null,
 				uuid: null,
-				activeIndex: "1"
+				name: "行政中心东楼",
+				full_name: "东莞市政府 行政中心东楼",
+				desc: "",
+				type: "building",
+				activeIndex: "1",
+				isCollapse: true
 			}
 		},
 		methods: {
@@ -72,6 +77,10 @@
 								path: '/EntityDetail', //跳转的路径
 								query: { //路由传参时push和query搭配使用 ，作用时传递参数
 									uuid: this.uuid,
+									name: this.name,
+									full: this.full_name,
+									desc: this.desc,
+									type: this.type,
 								}
 							})
 							break;
@@ -92,41 +101,46 @@
 			searchEntityAsync(keyword, cb) {
 				//网络通讯部分，现在因为跨域问题无法使用
 				var _this = this;
-				RestAPI.searchEntity(keyword, _this.size).then(res => {
-					console.log(res);
-					if (res.data.statusCode === 200) {
-						_this.suggested_entities = res.data.data;
-						console.log("suggested_entities");
-						console.log(_this.suggested_entities);
-
-						var results = [];
-						for (var i = 0; i < _this.suggested_entities.length; i++) {
-							var entity = _this.suggested_entities[i];
-							var FQDN = entity.FQDN;
-							var value = "";
-							switch (_this.selectedSearchMode) {
-								case "filter":
-									value = entity.name;
-									break;
-								case "prefix":
-									value = master_FQDN === "" ? FQDN : FQDN.substring(master_FQDN.length + 1);
-									break;
-								default:
-									value = entity.FQDN;
-									break;
+				
+				if (keyword == ""){
+					cb(this.searchHistory);
+				}
+				else {
+					RestAPI.searchEntity(keyword, _this.size).then(res => {
+						console.log(res);
+						if (res.data.statusCode === 200) {
+							_this.suggested_entities = res.data.data;
+							console.log("suggested_entities");
+							console.log(_this.suggested_entities);
+					
+							var results = [];
+							for (var i = 0; i < _this.suggested_entities.length; i++) {
+								var entity = _this.suggested_entities[i];
+								var FQDN = entity.FQDN;
+								var value = entity.master_FQDN;
+								var id = entity.uuid;
+								var name = entity.name;
+								var full_name = entity.FQDN;
+								var desc = entity.desc;
+								var type = entity.type;
+								results.push({
+									"value": value,
+									"FQDN": FQDN,
+									"uuid": id,
+									"name": name,
+									"type": type,
+									"desc": desc
+								});
 							}
-							results.push({
-								"value": value,
-								"FQDN": FQDN
-							});
+							console.log("results:")
+							console.log(results);
+							cb(results);
 						}
-						console.log("results:")
-						console.log(results);
-						cb(results);
-					}
-				}).catch(err => {
-					console.log(err)
-				});
+					}).catch(err => {
+						console.log(err)
+					});
+				}
+				
 
 				// var _this = this;
 
@@ -273,8 +287,15 @@
 			},
 			handleSelectEntity(entity) {
 				console.log('select entity: ' + entity.FQDN);
+				
+				//记录搜索历史
+				this.searchHistory.push(entity);
 
 				this.uuid = entity.uuid;
+				this.name = entity.name;
+				this.full_name = entity.FQDN;
+				this.desc = entity.desc;
+				this.type = entity.type;
 				//菜单跳转
 				this.activeIndex = "1";
 				//路由跳转
@@ -282,6 +303,10 @@
 					path: '/EntityDetail', //跳转的路径
 					query: { //路由传参时push和query搭配使用 ，作用时传递参数
 						uuid: this.uuid,
+						name: this.name,
+						full: this.full_name,
+						desc: this.desc,
+						type: this.type,
 					}
 				})
 
@@ -298,8 +323,8 @@
 				// 						});
 				// 					}
 				// 				}
-// 				console.log("entityTags: ");
-// 				console.log(this.entityTags);
+				// 				console.log("entityTags: ");
+				// 				console.log(this.entityTags);
 			},
 			getFQDNOfEntityTags() {
 				if (this.fullTextBased()) return "";
@@ -312,6 +337,16 @@
 				}
 				return FQDN;
 			},
+			collapseOpen() {
+				this.isCollapse = false;
+			},
+			collapseClose() {
+				this.isCollapse = true;
+			},
+			resetIndex(){
+				//菜单跳转
+				this.activeIndex = "1";
+			}
 		}
 	}
 </script>
