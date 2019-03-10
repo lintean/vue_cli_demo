@@ -12,6 +12,10 @@
 						<i class="el-icon-menu"></i>
 						<span slot="title">实体关联</span>
 					</el-menu-item>
+		          <el-menu-item index="3">
+		            <i class="el-icon-menu"></i>
+		            <span slot="title">图片服务</span>
+		          </el-menu-item>
 				</el-menu>
 			</el-aside>
 
@@ -87,6 +91,13 @@
 							})
 							break;
 						}
+          case "3":
+          {
+            this.$router.push({
+              path: '/ImageView'
+            })
+            break;
+          }
 				}
 			},
 			searchEntityAsync(keyword, cb) {
