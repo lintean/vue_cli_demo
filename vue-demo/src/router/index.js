@@ -13,11 +13,11 @@ export default new Router({
       name: 'EntityDetail',
       component: EntityDetail
     },
-		{
-		  path: '/EntityNetwork',
-		  name: 'EntityNetwork',
-		  component: EntityNetwork
-		},
+    {
+      path: '/EntityNetwork',
+      name: 'EntityNetwork',
+      component: EntityNetwork
+    },
     {
       path: '/ImageView',
       name: 'ImageView',
