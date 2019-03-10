@@ -1,16 +1,37 @@
 <template>
-	<div>
-		<el-row style="margin-bottom: 10px; margin-top: 20px;">
-			<el-date-picker v-model="time" type="daterange" value-format="timestamp" unlink-panels range-separator="至"
-			 start-placeholder="开始日期" end-placeholder="结束日期" :picker-options="pickerOptions2" @change="handleTimeChange">
-			</el-date-picker>
-		</el-row>
+	<el-container style="width: 100%; height: 100%;">
+		<el-aside width="400px">
+			<div id="mynetwork2" ref="network2"></div>
+		</el-aside>
+		<el-container>
+			<el-header style="color: #545c64; border-bottom: 1px solid #eff2f6; height: 140px;">
+				<el-row style="text-align: center; margin-bottom: 10px;">
+					<el-col style="text-align: center;">实体信息</el-col>
+				</el-row>
+				<el-row>
+					<el-col :offset="3">名称：{{name}}</el-col>
+				</el-row>
+				<el-row>
+					<el-col :offset="3">全称：{{full_name}}</el-col>
+				</el-row>
+				<el-row>
+					<el-col :span="8" :offset="3">类型：{{entity_type}}</el-col>
+					<el-col :span="8" :offset="5">详情：{{entity_detail}}</el-col>
+				</el-row>
+			</el-header>
+			<el-main style="overflow-y: hidden; padding: 0; margin-top: 10px;">
+				<el-row>
+					<el-date-picker v-model="time" type="daterange" value-format="timestamp" unlink-panels range-separator="至"
+					 start-placeholder="开始日期" end-placeholder="结束日期" :picker-options="pickerOptions2" @change="handleTimeChange">
+					</el-date-picker>
+				</el-row>
 
-		<el-row>
-			<div class="chart" id="myChart"></div>
-		</el-row>
-
-	</div>
+				<el-row>
+					<div class="chart" id="myChart2"></div>
+				</el-row>
+			</el-main>
+		</el-container>
+	</el-container>
 </template>
 
 <script>
@@ -52,44 +73,74 @@
 				energy_detail: [],
 				chartXData: [],
 				chartYData: [],
-				uuid: null
+				uuid: "S000120010005",
+				node_limit: '',
+				hop_limit: '',
+				responseData: null,
+				res: null,
+				name: "实体名称",
+				full_name: "实体全称",
+				entity_type: "实体类型",
+				entity_detail: "实体详情",
+				types: [{
+						entity_type: "project",
+						name: "项目"
+					},
+					{
+						entity_type: "building",
+						name: "建筑"
+					},
+					{
+						entity_type: "floor",
+						name: "楼层"
+					},
+					{
+						entity_type: "room",
+						name: "房间"
+					},
+				]
 			};
 		},
 		mounted() {
 			//生成时触发默认时间
 			this.updateUuid();
+			//图重新加载
+			this.reset();
 		},
 		methods: {
 			handleTimeChange(newTime) {
 				// 			console.log(newTime);
-				// 			console.log(this.time);
+				console.log(this.time);
+				// console.log(this.time[0]);
 				var id = null;
 				var _this = this;
-				if (!this.uuid || this.uuid == "") id = "S000120030806";
-				else id = this.uuid;
+				id = this.uuid;
+
 
 				//这里是因跨域而暂时不用的网络通讯
-								RestAPI.EntityDetail(id, this.energy_type, this.time_type, this.time[0], this.time[1]).then(res => {
-									console.log(res);
-									if (res.data.statusCode === 200) {
-										_this.energy_detail = res.data;
-									}
-								}).catch(err => {
-									console.log(err)
-								});
+				RestAPI.EntityDetail(id, this.energy_type, this.time_type, this.time[0].toString(), this.time[1].toString()).then(
+					res => {
+						console.log(res);
+						if (res.data.statusCode === 200) {
+							_this.energy_detail = res.data.data.period_data;
 
-				//getTestData函数是放弃网络通讯之后，得到虚拟数据的函数,若启用网络通讯，请把此处注释掉
-				// this.getTestData();
-				//绘制图表的函数
-				this.drawLine();
+							//getTestData函数是放弃网络通讯之后，得到虚拟数据的函数,若启用网络通讯，请把此处注释掉
+							// this.getTestData();
+							//绘制图表的函数
+							this.drawLine();
+						}
+					}).catch(err => {
+					console.log(err)
+				});
+
 			},
 			drawLine() {
 				console.log("图表重绘");
 				//根据energy_detail生成chartXData和chartYData
 				this.genXYData();
-				
+
 				// 基于准备好的dom，初始化echarts实例
-				let myChart = this.$echarts.init(document.getElementById('myChart'))
+				let myChart = this.$echarts.init(document.getElementById('myChart2'))
 				// 绘制图表
 				myChart.setOption({
 					title: {
@@ -129,7 +180,7 @@
 					}]
 				});
 			},
-			getTestData(){
+			getTestData() {
 				this.energy_detail = {
 					"statusCode": 200,
 					"msg": "OK",
@@ -181,40 +232,174 @@
 					}
 				}
 			},
-			genXYData(){
+			genXYData() {
 				this.chartXData = [];
 				this.chartYData = [];
-				
-				var data = this.energy_detail.data.period_data;
-				for (var i = 0; i < data.length; ++i){
+
+				console.log(this.energy_detail);
+				var data = this.energy_detail;
+				for (var i = 0; i < data.length; ++i) {
 					var date = new Date(data[i].run_at);
 					this.chartXData.push(date.toLocaleDateString());
 					this.chartYData.push(data[i].value);
 				}
 			},
-			updateUuid(){
-				this.uuid = this.$route.query.uuid;  //接受参数关键代码
+			updateUuid() {
+				this.uuid = this.$route.query.uuid; //接受参数关键代码
+				this.name = this.$route.query.name;
+				this.full_name = this.$route.query.full;
+				this.entity_type = this.$route.query.type;
+				this.entity_detail = this.$route.query.desc;
 				console.log("接受参数：" + this.uuid);
 				
+				//更新类型
+				for (var i = 0; i < this.types.length; ++i){
+					if (this.types[i].entity_type == this.entity_type) this.entity_type = this.types[i].name;
+				}
+
 				//触发一次时间改变，默认为最近一周
-				const end = new Date();
-				const start = new Date();
-				start.setTime(start.getTime() - 3600 * 1000 * 24 * 7);
+				const start = 1530374400000;
+				const end = 1538323200000;
 				this.time = [start, end];
-				this.handleTimeChange()
+				this.handleTimeChange();
+				this.reset();
+			},
+			getData() {
+				var _this = this;
+				var response = null;
+				RestAPI.EntityNetwork(this.uuid, this.hop_limit, this.node_limit).then(res => {
+					console.log("receive network data:");
+					console.log(res);
+					// if(res.data.status === 200)
+					if (res.data.msg === "OK") {
+						response = res.data.data;
+						console.log("OK");
+						_this.res = res.data.data;
+						_this.responseData = _this.changeResponse(res.data.data);
+						_this.redraw();
+					}
+				}).catch(err => {
+					console.log(err);
+				});
+			},
+			changeResponse(response) {
+				// create an array with nodes
+				var nodes = new vis.DataSet();
+				for (var i = 0, len = response.entity_node.length; i < len; ++i) {
+					nodes.add({
+						'id': response.entity_node[i].aid,
+						'label': response.entity_node[i].name,
+						'title': response.entity_node[i].FQDN
+					})
+				}
+
+
+				// create an array with edges
+				var edges = new vis.DataSet();
+				for (var i = 0, len = response.entity_graph.length; i < len; ++i) {
+					for (var j = 0; j < response.entity_graph[i].adj_nodes_aid.length; ++j) {
+
+						if (response.entity_graph[i].adj_nodes_aid[j] > response.entity_graph[i].node_aid) {
+							edges.add({
+								'from': response.entity_graph[i].node_aid,
+								'to': response.entity_graph[i].adj_nodes_aid[j],
+							})
+						}
+
+					}
+				}
+
+				var data = {
+					nodes: nodes,
+					edges: edges
+				};
+
+				return data;
+			},
+			//重绘函数
+			reset() {
+				this.getData();
+			},
+			redraw() {
+				var data = this.responseData;
+
+				// create a network
+				var container = this.$refs.network2;
+				var options = {
+					autoResize: true,
+					height: '100%',
+					width: '100%',
+					interaction: {
+						hover: true
+					},
+					nodes: {
+						color: '#FFC454',
+						scaling: {
+							label: true
+						},
+						font: {
+							size: 16
+						},
+						shape: 'circle',
+						shadow: true,
+						heightConstraint: 30
+					}
+				};
+
+				var network = new vis.Network(container, data, options);
+
+				//bind event
+				network.on("hoverNode", function(params) {
+					// console.log('hoverNode Event:', params);
+				});
+				
+				var _this = this;
+				network.on("doubleClick", function(params) {
+					for (var i = 0; i < _this.res.entity_node.length; ++i) {
+						if (_this.res.entity_node[i].aid == params.nodes[0]) {
+							console.log('hoverNode Event:', _this.res.entity_node[i]);
+							
+							
+				
+							//路由跳转
+							_this.$parent.$router.push({ //核心语句
+								path: '/EntityDetail', //跳转的路径
+								query: { //路由传参时push和query搭配使用 ，作用时传递参数
+									uuid: _this.res.entity_node[i].uuid,
+									name: _this.res.entity_node[i].name,
+									full: _this.res.entity_node[i].FQDN,
+									desc: _this.res.entity_node[i].desc,
+									type: _this.res.entity_node[i].type
+								}
+							})
+						}
+					}
+				});
 			}
 		},
 		watch: {
-          // 如果路由有变化，会再次执行该方法
-          '$route': 'updateUuid'
-        }
+			// 如果路由有变化，会再次执行该方法
+			'$route': 'updateUuid'
+		}
 	};
 </script>
 
 <style>
-	#myChart {
-		width: 1000px;
-		height: 500px;
+	#myChart2 {
+		width: 100%;
+		height: 350px;
 		margin: 0 auto;
+	}
+
+	#mynetwork2 {
+		width: 24.375rem;
+		height: 95%;
+		border: 1px solid lightgray;
+	}
+
+	.el-header>.el-row>.el-col {
+		height: 30px;
+		font-size: 23px;
+		text-align: left;
 	}
 </style>
