@@ -7,6 +7,7 @@ import ImageView from '@/components/ImageView'
 Vue.use(Router)
 
 export default new Router({
+  base: '/entitysearch',
   routes: [
     {
       path: '/EntityDetail',
