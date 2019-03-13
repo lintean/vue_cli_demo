@@ -25,7 +25,6 @@
 					 start-placeholder="开始日期" end-placeholder="结束日期" :picker-options="pickerOptions2" @change="handleTimeChange">
 					</el-date-picker>
 				</el-row>
-
 				<el-row>
 					<div class="chart" id="myChart2" ref="bar_chart" style="width: 100%; height: 350px; margin: 0 auto;"></div>
 				</el-row>
@@ -251,9 +250,9 @@
 				this.entity_type = this.$route.query.type;
 				this.entity_detail = this.$route.query.desc;
 				console.log("接受参数：" + this.uuid);
-				
+
 				//更新类型
-				for (var i = 0; i < this.types.length; ++i){
+				for (var i = 0; i < this.types.length; ++i) {
 					if (this.types[i].entity_type == this.entity_type) this.entity_type = this.types[i].name;
 				}
 
@@ -352,15 +351,14 @@
 				network.on("hoverNode", function(params) {
 					// console.log('hoverNode Event:', params);
 				});
-				
+
 				var _this = this;
 				network.on("doubleClick", function(params) {
 					for (var i = 0; i < _this.res.entity_node.length; ++i) {
 						if (_this.res.entity_node[i].aid == params.nodes[0]) {
 							console.log('hoverNode Event:', _this.res.entity_node[i]);
-							
-							
-				
+
+
 							//路由跳转
 							_this.$parent.$router.push({ //核心语句
 								path: '/EntityDetail', //跳转的路径
@@ -385,7 +383,7 @@
 </script>
 
 <style>
-/* 	#myChart2 {
+	/* 	#myChart2 {
 		width: 100%;
 		height: 350px;
 		margin: 0 auto;
