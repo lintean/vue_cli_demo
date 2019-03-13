@@ -27,7 +27,7 @@
 				</el-row>
 
 				<el-row>
-					<div class="chart" id="myChart2"></div>
+					<div class="chart" id="myChart2" ref="bar_chart" style="width: 100%; height: 350px; margin: 0 auto;"></div>
 				</el-row>
 			</el-main>
 		</el-container>
@@ -140,7 +140,7 @@
 				this.genXYData();
 
 				// 基于准备好的dom，初始化echarts实例
-				let myChart = this.$echarts.init(document.getElementById('myChart2'))
+				let myChart = this.$echarts.init(this.$refs.bar_chart);
 				// 绘制图表
 				myChart.setOption({
 					title: {
@@ -385,11 +385,11 @@
 </script>
 
 <style>
-	#myChart2 {
+/* 	#myChart2 {
 		width: 100%;
 		height: 350px;
 		margin: 0 auto;
-	}
+	} */
 
 	#mynetwork2 {
 		width: 24.375rem;

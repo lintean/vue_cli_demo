@@ -6,6 +6,7 @@ import EntityNetwork from '@/components/EntityNetwork'
 Vue.use(Router)
 
 export default new Router({
+  base: '/entitysearch', 
   routes: [
     {
       path: '/EntityDetail',
