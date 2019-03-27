@@ -242,7 +242,7 @@
             font: {
               size: 16,
             },
-            shape: 'circle',
+            shape: 'ellipse',
             shadow: true,
             heightConstraint: 30
           }

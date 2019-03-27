@@ -339,7 +339,7 @@
 						font: {
 							size: 16
 						},
-						shape: 'circle',
+						shape: 'big ellipse',
 						shadow: true,
 						heightConstraint: 30
 					}
